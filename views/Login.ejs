@@ -1,0 +1,22 @@
+<%- include("partials/Header") %>
+<main style="padding:5% 30%; background-image: -webkit-linear-gradient(65deg, #5fcf80 50%, white 50%);" id="main">
+<br><br>
+<form action="/Login" method="POST"  style="padding:5% 10%;background:white;box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;">
+  <div class="text-center">
+    <br>
+    <h1 style="font-weight:bold;">LOGIN</h1><br>
+  </div>
+  <div class="form-group">
+    <label for="exampleInputEmail1">Email address</label>
+    <input name="Email"type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">Password</label>
+    <input name="Password" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+  </div>
+  <div class="text-center">
+        <br>  <button style="font-size:1.2rem; font-weight:bold; padding:1% 15%;"type="submit" class="btn registr rounded-pill">LOGIN</button><br>
+  </div>
+</form>
+</main>
+<%- include("partials/Footer") %>
