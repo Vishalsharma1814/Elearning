@@ -9,19 +9,16 @@ const session = require("express-session");
 const passport = require("passport");
 const passportLocalMongoose = require("passport-local-mongoose");
 
-const path = require("path");
-
 const app = express();
 
+app.use(express.static("public"));
 app.set('view engine', 'ejs');
-
 app.use(bodyParser.urlencoded({
   extended: true
 }));
-app.use(express.static("public"));
 
 app.use(session({
-  secret: "Our Little Secret.",
+  secret: "Our Little Secret",
   resave: false,
   saveUninitialized: false
 }));
@@ -36,17 +33,22 @@ mongoose.connect("mongodb+srv://Vishal123:Vishal123@cluster0.a8dka.mongodb.net/m
 });
 mongoose.set("useCreateIndex", true);
 const userSchema = new mongoose.Schema({
-  Name: String,
+  username: String,
+  Password: String
+});
+const postSchema = {
+  username: String,
   Mobile: String,
   Email: String,
-  Password: String,
   Address: String,
   Course: String
-});
+};
+
+const Post = mongoose.model("Post", postSchema);
 
 userSchema.plugin(passportLocalMongoose);
 
-const User = mongoose.model("User", userSchema);
+const User = new mongoose.model("User", userSchema);
 
 passport.use(User.createStrategy());
 
@@ -92,20 +94,8 @@ app.get("/postlog", function(req, res) {
 });
 app.post("/Register", function(req, res) {
 
-  Entry.register({
-      Name: req.body.Name
-    }, {
-      Mobile: req.body.Mobile
-    }, {
-      Email: req.body.Email
-    }, {
-      Password: req.body.Password
-    }, {
-      Address: req.body.Address
-    }, {
-      Course: req.body.Course
-    },
-    function(err, entry) {
+  User.register({username: req.body.username}, req.body.password ,
+    function(err, user) {
       if (err) {
         console.log(err);
         res.redirect("/Register");
@@ -116,28 +106,23 @@ app.post("/Register", function(req, res) {
       }
     });
 
-  // const entry = new Entry({
-  //   Name: req.body.Name,
-  //   Mobile: req.body.Mobile,
-  //   Email: req.body.Email,
-  //   Password: req.body.Password,
-  //   Address: req.body.Address,
-  //   Course: req.body.Course
-  // });
-  // entry.save(function(err) {
-  //   if (!err) {
-  //     res.redirect("/");
-  //   }
-  // });
+  const post = new Post({
+    username: req.body.username,
+    Mobile: req.body.Mobile,
+    Email: req.body.Email,
+    Address: req.body.Address,
+    Course: req.body.Course
+  });
+  post.save();
 });
 app.post("/Login", function(req, res) {
 
-  const entry = new Entry({
-    Email: req.body.Email,
-    Password: req.body.Password
+  const user = new User({
+    username: req.body.username,
+    password: req.body.password
   });
 
-  req.login(entry, function(err) {
+  req.login(user, function(err) {
     if (err) {
       console.log(err);
     } else {
